@@ -5,11 +5,11 @@ USER="ubuntu"
 # Define the IP addresses of the 5 AWS containers
 # Shards 1 - 3, Config, Mongos
 IPS=(
-  "34.201.217.210" # Shard 1
-  "3.87.41.235" # Shard 2
-  "98.81.209.128" # Shard 3
-  "3.93.71.207" # Config
-  "54.172.200.159" # Mongos
+  "54.210.49.223" # Shard 1
+  "34.207.195.71" # Shard 2
+  "54.225.3.188" # Shard 3
+  "54.85.100.174" # Config
+  "54.166.163.43" # Mongos
 )
 
 # Define config base directory and mongo ports

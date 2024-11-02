@@ -156,15 +156,22 @@ sudo mkdir -p "$BASE_DIR"
 sudo chmod -R 777 /db
 
 mongos --configdb config/$CONFIG_IP:$MONGO_PORT1 --port $MONGO_PORT1 --bind_ip_all --fork --logpath $BASE_DIR/mongos.log
+
+echo "Status before adding any shards"
+mongosh --port $MONGO_PORT1 --eval 'sh.status()'
+
+echo "Adding shards"
 mongosh --port $MONGO_PORT1 --eval 'sh.addShard("shard1/$S1_IP:$MONGO_PORT1")'
 mongosh --port $MONGO_PORT1 --eval 'sh.addShard("shard2/$S2_IP:$MONGO_PORT1")'
 mongosh --port $MONGO_PORT1 --eval 'sh.addShard("shard3/$S3_IP:$MONGO_PORT1")'
 
+echo "Adding db and shard collection"
 mongosh --port $MONGO_PORT1 --eval 'sh.enableSharding("testdb")'
 mongosh --port $MONGO_PORT1 --eval 'sh.shardCollection("testdb.movies", {id: "hashed"})' 
 
+echo "Fixing chunksize to 1mb"
 mongosh --port $MONGO_PORT1 --eval 'db.getSiblingDB("testdb").settings.updateOne({ _id: "chunksize" },{ \$set: { _id: "chunksize", value: 1} },{ upsert: true })'
-mongosh --port $MONGO_PORT1 --eval 'db.getSiblingDB("testdb").settings.find()'
 
+echo "Shard Status after adding shards"
 mongosh --port $MONGO_PORT1 --eval 'sh.status()'
 EOF
